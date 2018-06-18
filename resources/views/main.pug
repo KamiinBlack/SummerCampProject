@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    title Your Events
+    script
+      include ../javascript/update-event-list.js 
+      //include ../javascript/add-event-button-update.js
+      //include ../javascript/add-event-button-delate.js
+    
+  body
+    h1 EVENTS 
+    div
+      div
+        div
+          h3 Name of event Description of Event
+          div
+            form(action='/events-main', method='post')
+              input(type='text', name='titleOfEvent', placeholder='title', required='')
+              input(type='text', name='describeOfEvent', placeholder='dics', required='')
+              .tp
+                input(type='submit', value='ADD')
+      div
+        div
+          p
+            a(href='#')  By clicking register, I agree to your terms
+          p
+            a(href="/logout") LOGOUT
+        #ulEvent
+            ul
+            
+
+
