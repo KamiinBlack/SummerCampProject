@@ -8,6 +8,10 @@ var LocalStrategy = require('passport-local').Strategy;
 
 
 
+var a = null;
+
+
+
 // GET route for reading data
 router.get('/', function (req, res, next) {
     res.render('index');
@@ -65,14 +69,15 @@ router.post('/', function (req, res, next) {
 
 //POST route for adding new event
 router.post('/events-main', function (req, res, next) {
-    
+    //stworz nowy rekord w db
     if (req.body.titleOfEvent &&
-        req.body.describeOfEvent
+        req.body.describeOfEvent && req.body.nameOfOrganiser
         ) {
 
         var userData = {
             titleOfEvent: req.body.titleOfEvent,
-            describeOfEvent: req.body.describeOfEvent
+            describeOfEvent: req.body.describeOfEvent,
+            nameOfOrganiser : req.body.nameOfOrganiser
             
         }
 
@@ -86,37 +91,71 @@ router.post('/events-main', function (req, res, next) {
         });
 
     }  
-    else if (req.body.hTitleOfEvent){
-        //let adress = '/added_events-main/' + req.body.hTitleOfEvent;
+   
+    
+    
+    //usun rekord z db
+    else if (req.body.hTitleOfEvent && req.body.hDescOfEvent){
         
-        let todelete = {
-            TitleOfEvent: req.body.hTitleOfEvent,
-            describeOfEvent: req.body.hDescOfEvent
-        }
         
-        let todelete2 = {"TitleOfEvent": req.body.hTitleOfEvent }
         
-        //let a = Eventy.findOne(todelete2).exec();
-        //console.log(a);
-        
-        Eventy.remove({"TitleOfEvent" : "aaa:"}, function(err, obj) {
-            if (err) throw err;
-            console.log(obj.result + " document(s) deleted");
-            Eventy.close();
-             });
- 
+        Eventy.findOne({ titleOfEvent: req.body.hTitleOfEvent }).deleteOne().exec(function (err,eventies){
+            console.log("cos sie tu dzieje : " , eventies);
+            return res.redirect('/events-main');
+        })  
     }
     
+     //modufuj rekord z db
+    else if (req.body.hTitleOfEvent2){
+        console.log('waiting ....')
+        console.log(req.body.hTitleOfEvent2)
+        a = req.body.hTitleOfEvent2;
+        return a;
+         
+    }
+    
+     else if (req.body.mTitleOfEvent2){
+         console.log('htitle from mod',a);
+         console.log('mtitle from mod',req.body.mTitleOfEvent2);
+         
+                  
+        Eventy.update({ titleOfEvent: a }, {$set: {titleOfEvent: req.body.mTitleOfEvent2}}).exec(function (err,eventies){
+            if (err) {
+                return next(err);
+            }
+            else{
+            console.log("cos sie tu dzieje modifikuja! : " , eventies);
+            res.redirect('back');
+        }})  
+    }
+        
+    
+        
+   
+        
+        
+        
+    
+    
+    //kontrola błedów
     else {
-        var err = new Error('All fields required.');
-        err.status = 400;
-        return next(err);
-    }
-    
-})
+            var err = new Error('All fields required.');
+            err.status = 400;
+            return next(err);
+        }
+    })
 
 
-// GET route after registering
+
+
+
+
+
+
+
+
+
+// GET route after registering   //z tego można zrobić midware kotry bedzie spawdzac zalogowanie moze //https://expressjs.com/en/guide/writing-middleware.html
 router.get('/profile', function (req, res, next) {
     User.findById(req.session.userId)
         .exec(function (error, user) {
@@ -146,11 +185,9 @@ router.get('/events-main', function (req, res, next) {
                 err.status = 400;
                 return next(err);
             } else {
-                Eventy.find().exec(function (err,eventies) {
-                //console.log(eventies); 
-                res.render('main');
                 
-            });        
+                res.render('main');
+                               
             }
 
 };

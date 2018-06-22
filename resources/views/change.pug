@@ -1,0 +1,29 @@
+doctype html
+html
+  head
+    title Change information about events
+    script
+      //include ../javascript/update-event-list.js 
+      //include ../javascript/add-event-button-update.js
+      //include ../javascript/add-event-button-delate.js
+    
+  body
+    h1 EVENTS 
+    div
+      div
+        div
+          h3 Change info about Event
+          div
+            form(action='/change', method='post')
+              input(type='text', name='ctitleOfEvent', placeholder='new title')
+              input(type='text', name='cdescribeOfEvent', placeholder='new dics')
+              input(type='text', name='cnameOfOrganiser', placeholder='new organise by')
+              .tp
+                input(type='submit', value='CHANGE')
+      div
+        div
+          a(href="/logout") LOGOUT
+        
+            
+
+

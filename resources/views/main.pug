@@ -4,7 +4,7 @@ html
     title Your Events
     script
       include ../javascript/update-event-list.js 
-      //include ../javascript/add-event-button-update.js
+      include ../javascript/add-event-button-update.js
       //include ../javascript/add-event-button-delate.js
     
   body
@@ -17,6 +17,7 @@ html
             form(action='/events-main', method='post')
               input(type='text', name='titleOfEvent', placeholder='title', required='')
               input(type='text', name='describeOfEvent', placeholder='dics', required='')
+              input(type='text', name='nameOfOrganiser', placeholder='organise by', required='')
               .tp
                 input(type='submit', value='ADD')
       div
